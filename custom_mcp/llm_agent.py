@@ -50,15 +50,17 @@ class LLMAgent:
                 "jsonrpc": "2.0",
                 "method": "initialize",
                 "params": {
-                    "protocolVersion": "1.0",
+                    "protocolVersion": "2024-11-05",
                     "clientInfo": {
                         "name": "LLM Agent",
                         "version": "1.0.0"
                     },
                     "capabilities": {
-                        "tools": True,
-                        "resources": False,
-                        "prompts": False
+                        "roots": {
+                            "listChanged": False
+                        },
+                        "sampling": {},
+                        "experimental": {}
                     }
                 },
                 "id": "init-1"

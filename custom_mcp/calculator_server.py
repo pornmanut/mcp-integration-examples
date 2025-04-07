@@ -100,15 +100,24 @@ class MCPCalculatorServer:
     def handle_initialize(self):
         """Handle an initialize request."""
         return {
-            "protocolVersion": "1.0",
+            "protocolVersion": "2024-11-05",
             "serverInfo": {
                 "name": SERVER_NAME,
                 "version": SERVER_VERSION
             },
             "capabilities": {
-                "tools": True,
-                "resources": False,
-                "prompts": False
+                "tools": {
+                    "listChanged": False  # We don't support dynamic tool changes
+                },
+                "resources": {
+                    "subscribe": False,
+                    "listChanged": False
+                },
+                "prompts": {
+                    "listChanged": False
+                },
+                "logging": {},
+                "experimental": {}
             }
         }
     

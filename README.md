@@ -9,11 +9,17 @@ This project demonstrates different implementations of the Model Context Protoco
   - LLM agent that connects directly to the MCP server over HTTP
   - No dependency on official MCP SDK
 
-## Custom MCP Implementation
+- `/sdk_mcp`: An implementation using the official MCP Python SDK
+  - Calculator server with add, subtract, multiply, and divide operations
+  - LLM agent that uses the MCP client from the SDK
+  - Uses the abstractions and utilities provided by the SDK
 
-See the [custom_mcp/README.md](custom_mcp/README.md) for details on the custom implementation.
+## Documentation
 
-### Setup and Usage
+- [custom_mcp/README.md](custom_mcp/README.md) - Details on the custom implementation
+- [sdk_mcp/README.md](sdk_mcp/README.md) - Details on the SDK-based implementation
+
+## Setup
 
 1. Install the required packages:
    ```
@@ -24,37 +30,55 @@ See the [custom_mcp/README.md](custom_mcp/README.md) for details on the custom i
    - Copy `.env.example` to `.env`
    - Add your DeepSeek API key to the `.env` file
 
-3. Start the MCP calculator server (in one terminal):
+## Running the Examples
+
+### Custom MCP Implementation
+
+1. Start the custom MCP calculator server (in one terminal):
    ```
    python custom_mcp/calculator_server.py
    ```
 
-4. Run the LLM agent in another terminal:
+2. Run the custom LLM agent in another terminal:
    ```
    python custom_mcp/llm_agent.py
    ```
 
-5. Enter requests and see the agent use tools as needed
-   - Try asking "What is 145 plus 237?"
-   - Try asking "Subtract 50 from 100"
-   - Try normal questions that don't need tools
+### SDK-based MCP Implementation
+
+1. Start the SDK-based MCP calculator server (in one terminal):
+   ```
+   python sdk_mcp/calculator_server.py
+   ```
+
+2. Run the SDK-based LLM agent in another terminal:
+   ```
+   python sdk_mcp/llm_agent.py
+   ```
+
+## Example Queries
+
+For both implementations, you can try queries like:
+- "What is 145 plus 237?"
+- "Subtract 50 from 100"
+- "What is 25 multiplied by 4?" (SDK implementation only)
+- "Divide 100 by 8" (SDK implementation only)
+- Regular questions that don't need tools
+
+## Implementation Comparison
+
+| Feature | Custom MCP | SDK-based MCP |
+|---------|------------|---------------|
+| Code complexity | Higher (handles protocol details) | Lower (abstractions from SDK) |
+| Tools | Add, Subtract | Add, Subtract, Multiply, Divide |
+| Port | 8000 | 8001 |
+| External dependencies | None for MCP, but requires httpx | MCP Python SDK + httpx |
+| Protocol compliance | Manual implementation | Managed by SDK |
 
 ## Command Line Options
 
-The LLM agent supports several command line options:
+Both LLM agents support these command line options:
 
-- `--input` or `-i`: Process a single input and exit (e.g., `python custom_mcp/llm_agent.py -i "5+4"`)
-- `--server` or `-s`: Specify the MCP server URL (default: http://localhost:8000)
+- `--input` or `-i`: Process a single input and exit (e.g., `python sdk_mcp/llm_agent.py -i "5+4"`)
+- `--server` or `-s`: Specify the MCP server URL
 - `--test-api` or `-t`: Test the DeepSeek API connection and exit
-
-## Implementation Details
-
-The custom MCP implementation shows the core flows of an MCP system:
-
-1. **Standalone Components**: Server and agent run independently and communicate via HTTP
-2. **Tool Discovery**: The agent discovers tools from the server via standard MCP methods
-3. **LLM Integration**: Tool descriptions are formatted and included in the prompt to the LLM
-4. **Tool Execution**: When the LLM decides to use a tool, the agent executes it via HTTP
-5. **Response Handling**: Tool results are fed back to the LLM for interpretation
-
-This implementation follows the MCP protocol specification while maintaining clear separation between components. 
